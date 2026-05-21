@@ -1,0 +1,5 @@
+com\example\unitconverter\ConversionResult.class
+UnitConverter.class
+DecayingUnitConverter.class
+com\example\unitconverter\UnitConverterService$ParsedInput.class
+com\example\unitconverter\UnitConverterService.class
