@@ -1,3 +1,4 @@
 com\example\unitconverter\ConversionResult.class
+UnitConverter.class
 com\example\unitconverter\UnitConverterService$ParsedInput.class
 com\example\unitconverter\UnitConverterService.class

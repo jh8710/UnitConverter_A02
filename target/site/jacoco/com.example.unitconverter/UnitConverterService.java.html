@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ko"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UnitConverterService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">unit-converter-a02</a> &gt; <a href="index.source.html" class="el_package">com.example.unitconverter</a> &gt; <span class="el_source">UnitConverterService.java</span></div><h1>UnitConverterService.java</h1><pre class="source lang-java linenums">package com.example.unitconverter;
+
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class UnitConverterService {
+    public static final double FEET_PER_METER = 3.28084;
+    public static final double YARD_PER_METER = 1.09361;
+
+<span class="fc" id="L22">    private static final Pattern JSON_OBJECT_PATTERN = Pattern.compile(&quot;\\{([^{}]+)}&quot;);</span>
+<span class="fc" id="L23">    private static final Pattern JSON_UNIT_PATTERN = Pattern.compile(&quot;\&quot;unit\&quot;\\s*:\\s*\&quot;([^\&quot;]+)\&quot;&quot;);</span>
+<span class="fc" id="L24">    private static final Pattern JSON_METERS_PATTERN = Pattern.compile(&quot;\&quot;metersPerUnit\&quot;\\s*:\\s*([-+]?\\d+(?:\\.\\d+)?)&quot;);</span>
+
+<span class="fc" id="L26">    private final Map&lt;String, BigDecimal&gt; metersPerUnit = new LinkedHashMap&lt;&gt;();</span>
+
+<span class="fc" id="L28">    public UnitConverterService() {</span>
+<span class="fc" id="L29">        loadDefaults();</span>
+<span class="fc" id="L30">    }</span>
+
+    public final void loadDefaults() {
+<span class="fc" id="L33">        metersPerUnit.clear();</span>
+<span class="fc" id="L34">        metersPerUnit.put(&quot;meter&quot;, BigDecimal.ONE);</span>
+<span class="fc" id="L35">        metersPerUnit.put(&quot;feet&quot;, BigDecimal.ONE.divide(BigDecimal.valueOf(FEET_PER_METER), 20, java.math.RoundingMode.HALF_UP));</span>
+<span class="fc" id="L36">        metersPerUnit.put(&quot;yard&quot;, BigDecimal.ONE.divide(BigDecimal.valueOf(YARD_PER_METER), 20, java.math.RoundingMode.HALF_UP));</span>
+<span class="fc" id="L37">    }</span>
+
+    public double convert(String sourceUnit, double sourceValue, String targetUnit) {
+<span class="fc" id="L40">        validateFiniteValue(sourceValue);</span>
+<span class="fc" id="L41">        validateNonNegative(sourceValue);</span>
+<span class="fc" id="L42">        BigDecimal sourceRatio = ratioFor(sourceUnit);</span>
+<span class="fc" id="L43">        BigDecimal targetRatio = ratioFor(targetUnit);</span>
+
+<span class="fc" id="L45">        BigDecimal meters = BigDecimal.valueOf(sourceValue).multiply(sourceRatio);</span>
+<span class="fc" id="L46">        return meters.divide(targetRatio, 20, java.math.RoundingMode.HALF_UP).doubleValue();</span>
+    }
+
+    public List&lt;ConversionResult&gt; convertAll(String sourceUnit, double sourceValue) {
+<span class="fc" id="L50">        validateFiniteValue(sourceValue);</span>
+<span class="fc" id="L51">        validateNonNegative(sourceValue);</span>
+<span class="fc" id="L52">        ratioFor(sourceUnit);</span>
+
+<span class="fc" id="L54">        List&lt;ConversionResult&gt; results = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        for (String targetUnit : metersPerUnit.keySet()) {</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">            if (!targetUnit.equals(sourceUnit)) {</span>
+<span class="fc" id="L57">                results.add(new ConversionResult(sourceUnit, sourceValue, targetUnit, convert(sourceUnit, sourceValue, targetUnit)));</span>
+            }
+<span class="fc" id="L59">        }</span>
+<span class="fc" id="L60">        return results;</span>
+    }
+
+    public List&lt;String&gt; convertInputToConsoleLines(String input) {
+<span class="fc" id="L64">        ParsedInput parsedInput = parseInput(input);</span>
+<span class="fc" id="L65">        DecimalFormat format = new DecimalFormat(&quot;0.0&quot;, DecimalFormatSymbols.getInstance(Locale.US));</span>
+
+<span class="fc" id="L67">        return convertAll(parsedInput.unit(), parsedInput.value()).stream()</span>
+<span class="fc" id="L68">                .map(result -&gt; parsedInput.originalValue() + &quot; &quot; + parsedInput.unit()</span>
+<span class="fc" id="L69">                        + &quot; = &quot; + format.format(result.convertedValue()) + &quot; &quot; + result.targetUnit())</span>
+<span class="fc" id="L70">                .toList();</span>
+    }
+
+    public void registerUnit(String unit, double metersPerUnitValue) {
+<span class="fc" id="L74">        validateUnitName(unit);</span>
+<span class="fc" id="L75">        validateFiniteValue(metersPerUnitValue);</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">        if (metersPerUnitValue &lt;= 0) {</span>
+<span class="fc" id="L77">            throw new IllegalArgumentException(&quot;metersPerUnit must be greater than zero&quot;);</span>
+        }
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        if (metersPerUnit.containsKey(unit)) {</span>
+<span class="fc" id="L80">            throw new IllegalArgumentException(&quot;duplicate unit: &quot; + unit);</span>
+        }
+<span class="fc" id="L82">        metersPerUnit.put(unit, BigDecimal.valueOf(metersPerUnitValue));</span>
+<span class="fc" id="L83">    }</span>
+
+    public boolean loadConfig(Path configPath) {
+<span class="fc bfc" id="L86" title="All 2 branches covered.">        if (!Files.exists(configPath)) {</span>
+<span class="fc" id="L87">            return false;</span>
+        }
+
+        try {
+<span class="fc" id="L91">            String content = Files.readString(configPath);</span>
+<span class="pc bpc" id="L92" title="1 of 4 branches missed.">            Map&lt;String, BigDecimal&gt; parsedUnits = configPath.toString().endsWith(&quot;.yaml&quot;) || configPath.toString().endsWith(&quot;.yml&quot;)</span>
+<span class="fc" id="L93">                    ? parseYaml(content)</span>
+<span class="fc" id="L94">                    : parseJson(content);</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">            if (parsedUnits.isEmpty()) {</span>
+<span class="fc" id="L96">                throw new IllegalArgumentException(&quot;configuration contains no units&quot;);</span>
+            }
+<span class="fc" id="L98">            metersPerUnit.clear();</span>
+<span class="fc" id="L99">            metersPerUnit.putAll(parsedUnits);</span>
+<span class="fc" id="L100">            return true;</span>
+<span class="fc" id="L101">        } catch (IOException exception) {</span>
+<span class="fc" id="L102">            throw new IllegalArgumentException(&quot;configuration could not be read&quot;, exception);</span>
+        }
+    }
+
+    public Map&lt;String, Double&gt; registeredUnits() {
+<span class="fc" id="L107">        Map&lt;String, Double&gt; snapshot = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc" id="L108">        metersPerUnit.forEach((unit, ratio) -&gt; snapshot.put(unit, ratio.doubleValue()));</span>
+<span class="fc" id="L109">        return Collections.unmodifiableMap(snapshot);</span>
+    }
+
+    private ParsedInput parseInput(String input) {
+<span class="pc bpc" id="L113" title="1 of 6 branches missed.">        if (input == null || input.chars().filter(ch -&gt; ch == ':').count() != 1) {</span>
+<span class="fc" id="L114">            throw new IllegalArgumentException(&quot;invalid input format&quot;);</span>
+        }
+
+<span class="fc" id="L117">        String[] parts = input.split(&quot;:&quot;, -1);</span>
+<span class="fc" id="L118">        String unit = parts[0].trim();</span>
+<span class="fc" id="L119">        String valueText = parts[1].trim();</span>
+<span class="fc" id="L120">        validateUnitName(unit);</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">        if (valueText.isEmpty()) {</span>
+<span class="fc" id="L122">            throw new IllegalArgumentException(&quot;missing value&quot;);</span>
+        }
+
+        double value;
+        try {
+<span class="fc" id="L127">            value = Double.parseDouble(valueText);</span>
+<span class="fc" id="L128">        } catch (NumberFormatException exception) {</span>
+<span class="fc" id="L129">            throw new IllegalArgumentException(&quot;invalid number&quot;, exception);</span>
+<span class="fc" id="L130">        }</span>
+<span class="fc" id="L131">        validateFiniteValue(value);</span>
+<span class="fc" id="L132">        validateNonNegative(value);</span>
+<span class="fc" id="L133">        ratioFor(unit);</span>
+<span class="fc" id="L134">        return new ParsedInput(unit, valueText, value);</span>
+    }
+
+    private Map&lt;String, BigDecimal&gt; parseJson(String content) {
+<span class="fc" id="L138">        Map&lt;String, BigDecimal&gt; parsedUnits = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc" id="L139">        Matcher objectMatcher = JSON_OBJECT_PATTERN.matcher(content);</span>
+<span class="fc bfc" id="L140" title="All 2 branches covered.">        while (objectMatcher.find()) {</span>
+<span class="fc" id="L141">            String objectBody = objectMatcher.group(1);</span>
+<span class="fc" id="L142">            Matcher unitMatcher = JSON_UNIT_PATTERN.matcher(objectBody);</span>
+<span class="fc" id="L143">            Matcher metersMatcher = JSON_METERS_PATTERN.matcher(objectBody);</span>
+<span class="pc bpc" id="L144" title="1 of 4 branches missed.">            if (unitMatcher.find() || metersMatcher.find()) {</span>
+<span class="pc bpc" id="L145" title="1 of 4 branches missed.">                if (!unitMatcher.reset().find() || !metersMatcher.reset().find()) {</span>
+<span class="fc" id="L146">                    throw new IllegalArgumentException(&quot;invalid unit configuration&quot;);</span>
+                }
+<span class="fc" id="L148">                parsedUnits.put(unitMatcher.group(1), parsePositiveRatio(metersMatcher.group(1)));</span>
+            }
+<span class="fc" id="L150">        }</span>
+<span class="fc" id="L151">        return parsedUnits;</span>
+    }
+
+    private Map&lt;String, BigDecimal&gt; parseYaml(String content) {
+<span class="fc" id="L155">        Map&lt;String, BigDecimal&gt; parsedUnits = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc" id="L156">        String currentUnit = null;</span>
+<span class="fc bfc" id="L157" title="All 2 branches covered.">        for (String rawLine : content.split(&quot;\\R&quot;)) {</span>
+<span class="fc" id="L158">            String line = rawLine.trim();</span>
+<span class="fc bfc" id="L159" title="All 2 branches covered.">            if (line.startsWith(&quot;- unit:&quot;)) {</span>
+<span class="fc" id="L160">                currentUnit = line.substring(&quot;- unit:&quot;.length()).trim();</span>
+<span class="fc bfc" id="L161" title="All 2 branches covered.">            } else if (line.startsWith(&quot;unit:&quot;)) {</span>
+<span class="fc" id="L162">                currentUnit = line.substring(&quot;unit:&quot;.length()).trim();</span>
+<span class="fc bfc" id="L163" title="All 2 branches covered.">            } else if (line.startsWith(&quot;metersPerUnit:&quot;)) {</span>
+<span class="pc bpc" id="L164" title="1 of 4 branches missed.">                if (currentUnit == null || currentUnit.isBlank()) {</span>
+<span class="fc" id="L165">                    throw new IllegalArgumentException(&quot;missing unit&quot;);</span>
+                }
+<span class="fc" id="L167">                String value = line.substring(&quot;metersPerUnit:&quot;.length()).trim();</span>
+<span class="fc" id="L168">                parsedUnits.put(currentUnit, parsePositiveRatio(value));</span>
+<span class="fc" id="L169">                currentUnit = null;</span>
+            }
+        }
+<span class="fc bfc" id="L172" title="All 2 branches covered.">        if (currentUnit != null) {</span>
+<span class="fc" id="L173">            throw new IllegalArgumentException(&quot;missing metersPerUnit&quot;);</span>
+        }
+<span class="fc" id="L175">        return parsedUnits;</span>
+    }
+
+    private BigDecimal parsePositiveRatio(String value) {
+        try {
+<span class="fc" id="L180">            BigDecimal ratio = new BigDecimal(value);</span>
+<span class="fc bfc" id="L181" title="All 2 branches covered.">            if (ratio.compareTo(BigDecimal.ZERO) &lt;= 0) {</span>
+<span class="fc" id="L182">                throw new IllegalArgumentException(&quot;ratio must be greater than zero&quot;);</span>
+            }
+<span class="fc" id="L184">            return ratio;</span>
+<span class="fc" id="L185">        } catch (NumberFormatException exception) {</span>
+<span class="fc" id="L186">            throw new IllegalArgumentException(&quot;invalid ratio&quot;, exception);</span>
+        }
+    }
+
+    private BigDecimal ratioFor(String unit) {
+<span class="fc" id="L191">        validateUnitName(unit);</span>
+<span class="fc" id="L192">        BigDecimal ratio = metersPerUnit.get(unit);</span>
+<span class="fc bfc" id="L193" title="All 2 branches covered.">        if (ratio == null) {</span>
+<span class="fc" id="L194">            throw new IllegalArgumentException(&quot;unsupported unit: &quot; + unit);</span>
+        }
+<span class="fc" id="L196">        return ratio;</span>
+    }
+
+    private void validateUnitName(String unit) {
+<span class="pc bpc" id="L200" title="1 of 4 branches missed.">        if (unit == null || unit.isBlank()) {</span>
+<span class="fc" id="L201">            throw new IllegalArgumentException(&quot;unit is required&quot;);</span>
+        }
+<span class="fc" id="L203">    }</span>
+
+    private void validateNonNegative(double value) {
+<span class="fc bfc" id="L206" title="All 2 branches covered.">        if (value &lt; 0) {</span>
+<span class="fc" id="L207">            throw new IllegalArgumentException(&quot;negative value is not allowed&quot;);</span>
+        }
+<span class="fc" id="L209">    }</span>
+
+    private void validateFiniteValue(double value) {
+<span class="fc bfc" id="L212" title="All 2 branches covered.">        if (!Double.isFinite(value)) {</span>
+<span class="fc" id="L213">            throw new IllegalArgumentException(&quot;value must be finite&quot;);</span>
+        }
+<span class="fc" id="L215">    }</span>
+
+<span class="fc" id="L217">    private record ParsedInput(String unit, String originalValue, double value) {</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
