@@ -1,13 +1,23 @@
 package com.example.unitconverter;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
 class UnitConverterDualTrackRedTest {
     @Test
     void ui_valid_meter_input_returns_conversion_result() {
-        fail("RED");
+        UnitConverterService service = new UnitConverterService();
+
+        List<String> lines = service.convertInputToConsoleLines("meter:2.5");
+
+        assertEquals(2, lines.size());
+        assertTrue(lines.contains("2.5 meter = 8.2 feet"));
+        assertTrue(lines.contains("2.5 meter = 2.7 yard"));
     }
 
     @Test
