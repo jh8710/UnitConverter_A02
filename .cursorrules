@@ -1,0 +1,204 @@
+project:
+  name: UnitConverter_A02
+  language: Java
+  java_version: 21
+  purpose: Length unit converter for practicing TDD, BCE layering, SRP, OCP, input validation, externalized unit definitions, dynamic unit registration, and output serialization.
+  default_units:
+    - meter
+    - feet
+    - yard
+
+code_style:
+  formatter: Google Java Format
+  naming:
+    packages: lower_case_dot_separated
+    classes: UpperCamelCase
+    interfaces: UpperCamelCase
+    methods: lowerCamelCase
+    fields: lowerCamelCase
+    constants: UPPER_SNAKE_CASE
+    test_classes: ClassNameTest
+    test_methods: shouldDescribeExpectedBehavior
+  packages:
+    boundary: Handles input parsing, validation, output serialization, and external schemas.
+    control: Coordinates use cases between boundary, entity, and data ports.
+    entity: Contains domain models, invariants, conversion rules, and domain services.
+    data: Loads and validates unit definitions without depending on boundary.
+  modules:
+    boundary_must_not_contain: conversion formulas
+    control_must_not_contain: serialization formats
+    entity_must_not_contain: file paths or console input
+    data_must_not_contain: user-facing messages
+
+architecture:
+  style: BCE
+  boundary:
+    responsibility:
+      - Parse external input.
+      - Validate external schema shape.
+      - Convert domain success results to output schema.
+      - Convert domain failures to error schema.
+    must_not:
+      - Perform unit conversion formulas.
+      - Own unit ratio definitions.
+  control:
+    responsibility:
+      - Orchestrate a single use case.
+      - Call entity APIs through explicit inputs and outputs.
+      - Request unit definitions through data interfaces.
+    must_not:
+      - Contain domain invariants.
+      - Serialize JSON, CSV, or table output.
+  entity:
+    responsibility:
+      - Enforce length value invariants.
+      - Enforce unit registration invariants.
+      - Perform deterministic unit conversion.
+      - Represent conversion results.
+    must_not:
+      - Depend on boundary classes.
+      - Depend on data implementation classes.
+      - Read files or write console output.
+  dependency_direction:
+    allowed:
+      - boundary -> control
+      - control -> entity
+      - control -> data interface
+      - data implementation -> data interface
+    forbidden:
+      - entity -> control
+      - entity -> boundary
+      - entity -> data implementation
+      - data -> boundary
+      - boundary -> data implementation
+
+tdd_rules:
+  red_phase:
+    description: Write a failing JUnit 5 test that fixes one observable contract before production behavior changes.
+    rules:
+      - Write the failing JUnit 5 test before changing production behavior.
+      - Name each test after the observable conversion contract it protects.
+      - Cover one invariant per test case.
+      - Assert exact error codes and message patterns for invalid input.
+      - Prefer boundary values for length, precision, and unit registration rules.
+    must_not:
+      - Do not write production code before the failing test exists.
+      - Do not combine unrelated invariants in one test.
+      - Do not assert implementation details such as private methods or internal storage.
+      - Do not weaken assertions to make a failing test pass.
+  green_phase:
+    description: Implement the smallest Java 21 behavior that passes the current failing test while preserving previous tests.
+    rules:
+      - Implement only the smallest behavior needed to pass the current failing test.
+      - Keep conversion formulas consistent with the registered unit ratios.
+      - Preserve all previously passing tests while adding new behavior.
+      - Return deterministic results for the same value, source unit, target unit, and precision.
+      - Keep validation failures explicit and testable.
+    must_not:
+      - Do not add untested features during the green phase.
+      - Do not change public contracts without updating the corresponding tests first.
+      - Do not hide invalid input with silent defaults.
+      - Do not duplicate conversion constants across unrelated components.
+  refactor_phase:
+    description: Improve structure only after the full affected test set is green.
+    rules:
+      - Refactor only while the full test suite is green.
+      - Improve names, responsibility boundaries, and duplication without changing behavior.
+      - Keep domain conversion logic independent from input parsing and output serialization.
+      - Move shared setup into test fixtures only when it improves readability.
+      - Run the affected JUnit 5 tests after each meaningful refactor.
+    must_not:
+      - Do not introduce new behavior during refactoring.
+      - Do not remove tests that protect public contracts.
+      - Do not merge boundary, domain, and data responsibilities into one class.
+      - Do not change serialized output formats unless a RED test requires it.
+
+testing:
+  framework: JUnit 5
+  structure: AAA
+  aaa:
+    arrange: Create explicit inputs, registered units, and fixtures.
+    act: Execute one public contract or use case.
+    assert: Verify observable result, error code, message pattern, or serialized schema.
+  fixtures:
+    rules:
+      - Keep fixtures local to a test class unless reused by at least three tests.
+      - Name fixtures after the contract they support.
+      - Do not hide important input values inside shared setup.
+      - Use in-memory unit definitions for domain and control tests.
+      - Use file fixtures only for data-layer loading tests.
+  coverage:
+    domain: 95
+    boundary: 90
+    data: 85
+    integration: 80
+  required_test_types:
+    - domain_unit_tests
+    - boundary_contract_tests
+    - data_loader_tests
+    - integration_tests
+  assertions:
+    - Assert exact numeric results with explicit precision policy.
+    - Assert exact error codes.
+    - Assert message patterns for user-facing errors.
+    - Assert serialized output field names and column order.
+
+forbidden:
+  - name: excessive_system_out_debugging
+    pattern: System.out.println used for temporary debugging in production code.
+    reason: Console debugging hides behavior from tests and pollutes boundary output contracts.
+    alternative: Use JUnit assertions for verification and a logger only when runtime diagnostics are required.
+  - name: hardcoded_magic_numbers
+    pattern: Raw conversion ratios or precision values repeated inside methods.
+    reason: Duplicated numeric literals make unit ratio changes unsafe and violate OCP.
+    alternative: Store ratios in unit definitions and use named constants for default precision.
+  - name: ignored_catch_exception
+    pattern: catch (Exception e) with empty body, comment-only body, or silent fallback.
+    reason: Broad ignored exceptions hide parsing, data loading, and validation failures.
+    alternative: Catch specific exceptions and convert them to tested error codes.
+  - name: public_mutable_fields
+    pattern: public non-final fields on domain, boundary, control, or data classes.
+    reason: Public mutable state bypasses invariants and makes tests order-dependent.
+    alternative: Use private final fields with constructor validation and explicit accessors when needed.
+  - name: god_class
+    pattern: One class parses input, converts units, loads data, formats output, and handles errors.
+    reason: Mixed responsibilities violate BCE, SRP, and make regression tests brittle.
+    alternative: Split behavior into boundary, control, entity, and data components.
+  - name: static_global_mutable_registry
+    pattern: static mutable maps or lists used as the shared unit registry.
+    reason: Global mutable registries leak state between JUnit 5 tests and break deterministic behavior.
+    alternative: Inject a registry or repository instance per test or use immutable snapshots.
+  - name: boundary_depending_on_data_implementation
+    pattern: Boundary classes directly create or import file-based repositories.
+    reason: Boundary-to-data implementation coupling bypasses control orchestration and makes contract tests harder.
+    alternative: Route use cases through control and depend on interfaces.
+  - name: floating_point_equality_without_policy
+    pattern: Direct equality assertions on decimal conversion results without a precision or rounding policy.
+    reason: Unit conversion requires predictable numeric comparison and output formatting.
+    alternative: Assert using the agreed precision, rounding mode, or exact decimal representation policy.
+
+file_structure:
+  tree:
+    - src/main/java/.../boundary/: input parsers, request validators, output serializers, error presenters
+    - src/main/java/.../control/: use case coordinators and application services
+    - src/main/java/.../entity/: length values, units, registries, conversion rules, domain results
+    - src/main/java/.../data/: unit definition loaders, repositories, file adapters, data validation
+    - src/test/java/.../boundary/: boundary contract tests with mocked domain or control collaborators
+    - src/test/java/.../control/: use case orchestration tests with fake repositories
+    - src/test/java/.../entity/: domain unit tests for invariants and conversion rules
+    - src/test/java/.../data/: JSON or YAML fixture loading tests
+    - src/test/resources/: test fixtures for data-layer and integration tests
+
+ai_behavior:
+  rules:
+    - Do not violate the declared dependency direction.
+    - Write or update JUnit 5 tests before changing production behavior.
+    - Keep refactoring work after the relevant tests are green.
+    - Preserve existing public contracts unless a RED test intentionally changes them.
+    - Keep boundary, control, entity, and data responsibilities separate.
+    - Prefer small changes that protect one invariant at a time.
+  must_not:
+    - Do not add conversion behavior without a failing test first.
+    - Do not place parsing, conversion, data loading, and serialization in one class.
+    - Do not introduce new frameworks without an explicit project need.
+    - Do not replace tested contracts with weaker assertions.
