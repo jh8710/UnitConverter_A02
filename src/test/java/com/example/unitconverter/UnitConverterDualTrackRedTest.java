@@ -1,6 +1,7 @@
 package com.example.unitconverter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -22,7 +23,9 @@ class UnitConverterDualTrackRedTest {
 
     @Test
     void ui_missing_colon_input_throws_illegal_argument_exception() {
-        fail("RED");
+        UnitConverterService service = new UnitConverterService();
+
+        assertThrows(IllegalArgumentException.class, () -> service.convertInputToConsoleLines("meter=2.5"));
     }
 
     @Test
@@ -47,7 +50,9 @@ class UnitConverterDualTrackRedTest {
 
     @Test
     void convert_meter_to_feet_returns_correct_ratio() {
-        fail("RED");
+        UnitConverterService service = new UnitConverterService();
+
+        assertEquals(8.202100, service.convert("meter", 2.5, "feet"), 1e-5);
     }
 
     @Test
