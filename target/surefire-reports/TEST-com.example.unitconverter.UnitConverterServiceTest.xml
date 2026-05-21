@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.example.unitconverter.UnitConverterServiceTest" time="0.47" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.example.unitconverter.UnitConverterServiceTest" time="1.499" tests="34" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="25"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -15,9 +15,8 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="KR"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Eclipse Adoptium\jdk-25.0.3.9-hotspot\bin"/>
-    <property name="sun.java.command" value="C:\Users\정환\AppData\Local\Temp\surefire11389260711120921493\surefirebooter-20260521101905502_3.jar C:\Users\정환\AppData\Local\Temp\surefire11389260711120921493 2026-05-21T10-19-04_851-jvmRun1 surefire-20260521101905502_1tmp surefire_0-20260521101905502_2tmp"/>
+    <property name="sun.java.command" value="C:\Users\정환\AppData\Local\Temp\surefire5802929766356193053\surefirebooter-20260521102954493_3.jar C:\Users\정환\AppData\Local\Temp\surefire5802929766356193053 2026-05-21T10-29-52_544-jvmRun1 surefire-20260521102954493_1tmp surefire_0-20260521102954493_2tmp"/>
     <property name="jdk.debug" value="release"/>
-    <property name="test" value="UnitConverterServiceTest#test_normalConversion_meterToFeet_returnsExpectedFeet"/>
     <property name="surefire.test.class.path" value="C:\dev\UnitConverter_A02\target\test-classes;C:\dev\UnitConverter_A02\target\classes;C:\Users\정환\.m2\repository\org\junit\jupiter\junit-jupiter\5.10.2\junit-jupiter-5.10.2.jar;C:\Users\정환\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.2\junit-jupiter-api-5.10.2.jar;C:\Users\정환\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\정환\.m2\repository\org\junit\platform\junit-platform-commons\1.10.2\junit-platform-commons-1.10.2.jar;C:\Users\정환\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\정환\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.10.2\junit-jupiter-params-5.10.2.jar;C:\Users\정환\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.10.2\junit-jupiter-engine-5.10.2.jar;C:\Users\정환\.m2\repository\org\junit\platform\junit-platform-engine\1.10.2\junit-platform-engine-1.10.2.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
     <property name="user.home" value="C:\Users\정환"/>
@@ -31,7 +30,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\정환\AppData\Local\Temp\surefire11389260711120921493\surefirebooter-20260521101905502_3.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\정환\AppData\Local\Temp\surefire5802929766356193053\surefirebooter-20260521102954493_3.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="25.0.3+9-LTS"/>
@@ -61,5 +60,38 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="69.0"/>
   </properties>
-  <testcase name="test_normalConversion_meterToFeet_returnsExpectedFeet" classname="com.example.unitconverter.UnitConverterServiceTest" time="0.337"/>
+  <testcase name="test_dynamicRegistration_registerCubit_convertsCubitToMeter" classname="com.example.unitconverter.UnitConverterServiceTest" time="0.467"/>
+  <testcase name="test_exception_invalidNumber_throwsIllegalArgumentException" classname="com.example.unitconverter.UnitConverterServiceTest" time="0.041"/>
+  <testcase name="test_normalConversion_meterToFeet_returnsExpectedFeet" classname="com.example.unitconverter.UnitConverterServiceTest" time="0.023"/>
+  <testcase name="test_dynamicRegistration_registerCubit_convertsMeterToCubit" classname="com.example.unitconverter.UnitConverterServiceTest" time="0.013"/>
+  <testcase name="test_dynamicRegistration_duplicateUnit_throwsIllegalArgumentException" classname="com.example.unitconverter.UnitConverterServiceTest" time="0.022"/>
+  <testcase name="test_configLoad_missingYamlUnit_throwsIllegalArgumentException" classname="com.example.unitconverter.UnitConverterServiceTest" time="0.055"/>
+  <testcase name="test_exception_negativeValue_throwsIllegalArgumentException" classname="com.example.unitconverter.UnitConverterServiceTest" time="0.022"/>
+  <testcase name="test_configLoad_missingPath_keepsDefaultRatios" classname="com.example.unitconverter.UnitConverterServiceTest" time="0.032"/>
+  <testcase name="test_configLoad_emptyJson_throwsIllegalArgumentException" classname="com.example.unitconverter.UnitConverterServiceTest" time="0.082"/>
+  <testcase name="test_configLoad_invalidJson_throwsIllegalArgumentException" classname="com.example.unitconverter.UnitConverterServiceTest" time="0.074"/>
+  <testcase name="test_configLoad_rootYamlUnit_loadsRatios" classname="com.example.unitconverter.UnitConverterServiceTest" time="0.026"/>
+  <testcase name="test_configLoad_missingYamlRatio_throwsIllegalArgumentException" classname="com.example.unitconverter.UnitConverterServiceTest" time="0.03"/>
+  <testcase name="test_normalConversion_yardToMeter_returnsReverseMeter" classname="com.example.unitconverter.UnitConverterServiceTest" time="0.009"/>
+  <testcase name="test_exception_unknownUnit_throwsIllegalArgumentException" classname="com.example.unitconverter.UnitConverterServiceTest" time="0.02"/>
+  <testcase name="test_exception_invalidFormat_throwsIllegalArgumentException" classname="com.example.unitconverter.UnitConverterServiceTest" time="0.014"/>
+  <testcase name="test_normalConversion_convertAllMeter_returnsRegisteredTargetConversions" classname="com.example.unitconverter.UnitConverterServiceTest" time="0.017"/>
+  <testcase name="test_boundary_zeroValue_returnsZeroFeet" classname="com.example.unitconverter.UnitConverterServiceTest" time="0.013"/>
+  <testcase name="test_boundary_largeValue_returnsFiniteFeet" classname="com.example.unitconverter.UnitConverterServiceTest" time="0.016"/>
+  <testcase name="test_boundary_consoleOutput_preservesOriginalValueAndUnit" classname="com.example.unitconverter.UnitConverterServiceTest" time="0.018"/>
+  <testcase name="test_configLoad_validJson_loadsRatios" classname="com.example.unitconverter.UnitConverterServiceTest" time="0.033"/>
+  <testcase name="test_normalConversion_meterToYard_returnsExpectedYard" classname="com.example.unitconverter.UnitConverterServiceTest" time="0.012"/>
+  <testcase name="test_exception_nanValue_throwsIllegalArgumentException" classname="com.example.unitconverter.UnitConverterServiceTest" time="0.021"/>
+  <testcase name="test_dynamicRegistration_zeroRatio_throwsIllegalArgumentException" classname="com.example.unitconverter.UnitConverterServiceTest" time="0.021"/>
+  <testcase name="test_normalConversion_feetToMeter_returnsReverseMeter" classname="com.example.unitconverter.UnitConverterServiceTest" time="0.016"/>
+  <testcase name="test_dynamicRegistration_convertAllAfterRegister_returnsCubitTarget" classname="com.example.unitconverter.UnitConverterServiceTest" time="0.013"/>
+  <testcase name="test_configLoad_directoryPath_throwsIllegalArgumentException" classname="com.example.unitconverter.UnitConverterServiceTest" time="0.028"/>
+  <testcase name="test_boundary_sixDecimalFeetValue_returnsSixDecimalPrecisionMeter" classname="com.example.unitconverter.UnitConverterServiceTest" time="0.011"/>
+  <testcase name="test_exception_malformedDecimal_throwsIllegalArgumentException" classname="com.example.unitconverter.UnitConverterServiceTest" time="0.011"/>
+  <testcase name="test_configLoad_validYaml_loadsRatios" classname="com.example.unitconverter.UnitConverterServiceTest" time="0.022"/>
+  <testcase name="test_configLoad_zeroJsonRatio_throwsIllegalArgumentException" classname="com.example.unitconverter.UnitConverterServiceTest" time="0.032"/>
+  <testcase name="test_exception_blankUnit_throwsIllegalArgumentException" classname="com.example.unitconverter.UnitConverterServiceTest" time="0.018"/>
+  <testcase name="test_exception_missingValue_throwsIllegalArgumentException" classname="com.example.unitconverter.UnitConverterServiceTest" time="0.01"/>
+  <testcase name="test_configLoad_invalidYaml_throwsIllegalArgumentException" classname="com.example.unitconverter.UnitConverterServiceTest" time="0.04"/>
+  <testcase name="test_boundary_sixDecimalMeterValue_returnsSixDecimalPrecisionFeet" classname="com.example.unitconverter.UnitConverterServiceTest" time="0.026"/>
 </testsuite>

@@ -1,12 +1,12 @@
 -------------------------------------------------------------------------------
 Test set: com.example.unitconverter.UnitConverterDualTrackRedTest
 -------------------------------------------------------------------------------
-Tests run: 12, Failures: 12, Errors: 0, Skipped: 0, Time elapsed: 0.413 s <<< FAILURE! -- in com.example.unitconverter.UnitConverterDualTrackRedTest
-com.example.unitconverter.UnitConverterDualTrackRedTest.convert_meter_to_feet_returns_correct_ratio -- Time elapsed: 0.120 s <<< FAILURE!
+Tests run: 12, Failures: 11, Errors: 0, Skipped: 0, Time elapsed: 1.114 s <<< FAILURE! -- in com.example.unitconverter.UnitConverterDualTrackRedTest
+com.example.unitconverter.UnitConverterDualTrackRedTest.convert_meter_to_feet_returns_correct_ratio -- Time elapsed: 0.376 s <<< FAILURE!
 org.opentest4j.AssertionFailedError: RED
 	at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:38)
 	at org.junit.jupiter.api.Assertions.fail(Assertions.java:138)
-	at com.example.unitconverter.UnitConverterDualTrackRedTest.convert_meter_to_feet_returns_correct_ratio(UnitConverterDualTrackRedTest.java:40)
+	at com.example.unitconverter.UnitConverterDualTrackRedTest.convert_meter_to_feet_returns_correct_ratio(UnitConverterDualTrackRedTest.java:50)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
@@ -15,70 +15,61 @@ com.example.unitconverter.UnitConverterDualTrackRedTest.convert_meter_to_yard_re
 org.opentest4j.AssertionFailedError: RED
 	at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:38)
 	at org.junit.jupiter.api.Assertions.fail(Assertions.java:138)
-	at com.example.unitconverter.UnitConverterDualTrackRedTest.convert_meter_to_yard_returns_correct_ratio(UnitConverterDualTrackRedTest.java:45)
+	at com.example.unitconverter.UnitConverterDualTrackRedTest.convert_meter_to_yard_returns_correct_ratio(UnitConverterDualTrackRedTest.java:55)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
 
-com.example.unitconverter.UnitConverterDualTrackRedTest.ui_missing_colon_input_throws_illegal_argument_exception -- Time elapsed: 0.005 s <<< FAILURE!
+com.example.unitconverter.UnitConverterDualTrackRedTest.ui_missing_colon_input_throws_illegal_argument_exception -- Time elapsed: 0.004 s <<< FAILURE!
 org.opentest4j.AssertionFailedError: RED
 	at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:38)
 	at org.junit.jupiter.api.Assertions.fail(Assertions.java:138)
-	at com.example.unitconverter.UnitConverterDualTrackRedTest.ui_missing_colon_input_throws_illegal_argument_exception(UnitConverterDualTrackRedTest.java:15)
+	at com.example.unitconverter.UnitConverterDualTrackRedTest.ui_missing_colon_input_throws_illegal_argument_exception(UnitConverterDualTrackRedTest.java:25)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
 
-com.example.unitconverter.UnitConverterDualTrackRedTest.ui_json_output_request_returns_expected_schema -- Time elapsed: 0.009 s <<< FAILURE!
+com.example.unitconverter.UnitConverterDualTrackRedTest.ui_json_output_request_returns_expected_schema -- Time elapsed: 0.011 s <<< FAILURE!
 org.opentest4j.AssertionFailedError: RED
 	at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:38)
 	at org.junit.jupiter.api.Assertions.fail(Assertions.java:138)
-	at com.example.unitconverter.UnitConverterDualTrackRedTest.ui_json_output_request_returns_expected_schema(UnitConverterDualTrackRedTest.java:35)
+	at com.example.unitconverter.UnitConverterDualTrackRedTest.ui_json_output_request_returns_expected_schema(UnitConverterDualTrackRedTest.java:45)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
 
-com.example.unitconverter.UnitConverterDualTrackRedTest.ui_output_preserves_original_unit_and_value -- Time elapsed: 0.007 s <<< FAILURE!
+com.example.unitconverter.UnitConverterDualTrackRedTest.ui_output_preserves_original_unit_and_value -- Time elapsed: 0.014 s <<< FAILURE!
 org.opentest4j.AssertionFailedError: RED
 	at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:38)
 	at org.junit.jupiter.api.Assertions.fail(Assertions.java:138)
-	at com.example.unitconverter.UnitConverterDualTrackRedTest.ui_output_preserves_original_unit_and_value(UnitConverterDualTrackRedTest.java:30)
+	at com.example.unitconverter.UnitConverterDualTrackRedTest.ui_output_preserves_original_unit_and_value(UnitConverterDualTrackRedTest.java:40)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
 
-com.example.unitconverter.UnitConverterDualTrackRedTest.register_unit_allows_conversion_with_new_unit -- Time elapsed: 0.008 s <<< FAILURE!
+com.example.unitconverter.UnitConverterDualTrackRedTest.register_unit_allows_conversion_with_new_unit -- Time elapsed: 0.015 s <<< FAILURE!
 org.opentest4j.AssertionFailedError: RED
 	at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:38)
 	at org.junit.jupiter.api.Assertions.fail(Assertions.java:138)
-	at com.example.unitconverter.UnitConverterDualTrackRedTest.register_unit_allows_conversion_with_new_unit(UnitConverterDualTrackRedTest.java:55)
+	at com.example.unitconverter.UnitConverterDualTrackRedTest.register_unit_allows_conversion_with_new_unit(UnitConverterDualTrackRedTest.java:65)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
 
-com.example.unitconverter.UnitConverterDualTrackRedTest.ui_negative_value_input_throws_illegal_argument_exception -- Time elapsed: 0.004 s <<< FAILURE!
+com.example.unitconverter.UnitConverterDualTrackRedTest.ui_negative_value_input_throws_illegal_argument_exception -- Time elapsed: 0.007 s <<< FAILURE!
 org.opentest4j.AssertionFailedError: RED
 	at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:38)
 	at org.junit.jupiter.api.Assertions.fail(Assertions.java:138)
-	at com.example.unitconverter.UnitConverterDualTrackRedTest.ui_negative_value_input_throws_illegal_argument_exception(UnitConverterDualTrackRedTest.java:20)
+	at com.example.unitconverter.UnitConverterDualTrackRedTest.ui_negative_value_input_throws_illegal_argument_exception(UnitConverterDualTrackRedTest.java:30)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
 
-com.example.unitconverter.UnitConverterDualTrackRedTest.load_config_applies_json_and_yaml_ratios -- Time elapsed: 0.005 s <<< FAILURE!
+com.example.unitconverter.UnitConverterDualTrackRedTest.load_config_applies_json_and_yaml_ratios -- Time elapsed: 0.011 s <<< FAILURE!
 org.opentest4j.AssertionFailedError: RED
 	at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:38)
 	at org.junit.jupiter.api.Assertions.fail(Assertions.java:138)
-	at com.example.unitconverter.UnitConverterDualTrackRedTest.load_config_applies_json_and_yaml_ratios(UnitConverterDualTrackRedTest.java:60)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
-
-com.example.unitconverter.UnitConverterDualTrackRedTest.ui_valid_meter_input_returns_conversion_result -- Time elapsed: 0.007 s <<< FAILURE!
-org.opentest4j.AssertionFailedError: RED
-	at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:38)
-	at org.junit.jupiter.api.Assertions.fail(Assertions.java:138)
-	at com.example.unitconverter.UnitConverterDualTrackRedTest.ui_valid_meter_input_returns_conversion_result(UnitConverterDualTrackRedTest.java:10)
+	at com.example.unitconverter.UnitConverterDualTrackRedTest.load_config_applies_json_and_yaml_ratios(UnitConverterDualTrackRedTest.java:70)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
@@ -87,7 +78,7 @@ com.example.unitconverter.UnitConverterDualTrackRedTest.ui_unknown_unit_input_th
 org.opentest4j.AssertionFailedError: RED
 	at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:38)
 	at org.junit.jupiter.api.Assertions.fail(Assertions.java:138)
-	at com.example.unitconverter.UnitConverterDualTrackRedTest.ui_unknown_unit_input_throws_illegal_argument_exception(UnitConverterDualTrackRedTest.java:25)
+	at com.example.unitconverter.UnitConverterDualTrackRedTest.ui_unknown_unit_input_throws_illegal_argument_exception(UnitConverterDualTrackRedTest.java:35)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
@@ -96,16 +87,16 @@ com.example.unitconverter.UnitConverterDualTrackRedTest.load_config_missing_path
 org.opentest4j.AssertionFailedError: RED
 	at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:38)
 	at org.junit.jupiter.api.Assertions.fail(Assertions.java:138)
-	at com.example.unitconverter.UnitConverterDualTrackRedTest.load_config_missing_path_keeps_default_ratios(UnitConverterDualTrackRedTest.java:65)
+	at com.example.unitconverter.UnitConverterDualTrackRedTest.load_config_missing_path_keeps_default_ratios(UnitConverterDualTrackRedTest.java:75)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
 
-com.example.unitconverter.UnitConverterDualTrackRedTest.convert_all_returns_all_registered_unit_conversions -- Time elapsed: 0.003 s <<< FAILURE!
+com.example.unitconverter.UnitConverterDualTrackRedTest.convert_all_returns_all_registered_unit_conversions -- Time elapsed: 0.006 s <<< FAILURE!
 org.opentest4j.AssertionFailedError: RED
 	at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:38)
 	at org.junit.jupiter.api.Assertions.fail(Assertions.java:138)
-	at com.example.unitconverter.UnitConverterDualTrackRedTest.convert_all_returns_all_registered_unit_conversions(UnitConverterDualTrackRedTest.java:50)
+	at com.example.unitconverter.UnitConverterDualTrackRedTest.convert_all_returns_all_registered_unit_conversions(UnitConverterDualTrackRedTest.java:60)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
