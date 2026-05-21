@@ -1,4 +1,0 @@
-GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-unit-converter-a02,com.example.unitconverter,ConversionResult,0,15,0,0,0,1,0,1,0,1
-unit-converter-a02,com.example.unitconverter,UnitConverterService,0,558,6,54,0,122,6,44,0,20
-unit-converter-a02,com.example.unitconverter,UnitConverterService.ParsedInput,0,12,0,0,0,1,0,1,0,1
